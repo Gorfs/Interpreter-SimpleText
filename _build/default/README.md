@@ -3,8 +3,7 @@ Universite Paris cite
 Licence informatique Generale
 
 Goal:
-Cree un interpreteur Ocaml-Menhir d'un language semi-latex semi-markdown
-
+CN
 
 AUTHORS:
 
