@@ -25,7 +25,6 @@ let lexbuf = Lexing.from_channel stdin
             *)
 let ast = Parser.input Lexer.main lexbuf 
 
-let result = eval ast []
+let result = document_to_string ast 
 
-let _ = Printf.printf "Parse:\n%s\n" (Ast.as_string ast);
- Printf.printf "Eval:\n%s\n" (string_of_bool result);
+let _ = Printf.printf "Parse:\n%s\n" (result);

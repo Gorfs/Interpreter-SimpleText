@@ -5,7 +5,9 @@ type element_de_texte =
   | Mot_italique of (string list) 
   | Mot_lien of  (string list) * string
 
-type texte = Texte of (element_de_texte list)
+type texte = 
+|Texte of (element_de_texte * texte)
+| Texte_vide
 
 type item = Item of texte
 
@@ -17,8 +19,7 @@ type element =
 
 type corps = Corps of (element list)
 
-type document = Document of element_de_texte 
-
+type document = Document of texte 
 
 
 let element_de_texte_to_string = function
@@ -27,18 +28,22 @@ let element_de_texte_to_string = function
   | Mot_italique ms -> "<i>" ^ (String.concat " " ms) ^ "</i>"
   | Mot_lien (ms, url) -> "<a href=\"" ^ url ^ "\">" ^ (String.concat " " ms) ^ "</a>"
 
-let texte_to_string (Texte elements) =
-  String.concat " " (List.map element_de_texte_to_string elements)
-let item_to_string (Item texte) = texte_to_string texte
-let element_to_string = function
-  | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
-  | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
-  | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
-  | Liste items -> "<ul>" ^ (String.concat "" (List.map (fun item -> "<li>" ^ (item_to_string item) ^ "</li>") items)) ^ "</ul>"
+let rec texte_to_string = function
+  | Texte (e, t) -> (element_de_texte_to_string e) ^ "<br>" ^ (texte_to_string t)
+  | Texte_vide -> ""
 
-let corps_to_string (Corps elements) =
-  String.concat "\n" (List.map element_to_string elements)
-let document_to_string (Document corps) =
-  "<html><body>" ^ (corps_to_string corps) ^ "</body></html>"
+
+(* let element_to_string = function *)
+  (* | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>" *)
+  (* | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>" *)
+  (* | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>" *)
+  (* | Liste items -> "<ul>" ^ (String.concat "" (List.map (fun item -> "<li>" ^ (item_to_string item) ^ "</li>") items)) ^ "</ul>" *)
+
+(* let corps_to_string (Corps elements) = *)
+  (* String.concat "\n" (List.map element_to_string elements) *)
+(* let document_to_string (Document corps) =
+  "<html><body>" ^ (corps_to_string corps) ^ "</body></html>" *)
+let document_to_string (Document doc) =
+  "<html><body>" ^ (texte_to_string doc) ^ "</body></html>"
 
 
