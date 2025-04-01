@@ -3,28 +3,29 @@ open Ast
 %}
 
 // %token STAR ITEM NEWLINE EOF HASH LBRACKET RBRACKET LPAREN RPAREN
-%token EOF 
+%token EOF HASH NEWLINE STAR //RPAREN LPAREN LBRACKET RBRACKET
 %token<string> MOT 
 
 %start<Ast.document> input
 
 
 %%
-
-  
 input: c=document { c }
 
-document:
-  | e=texte EOF { Document e }
 
-// corps:
-//   | e=element NEWLINE b=corps { e :: b }
-//   | e=element { [e] }
-// element:
-//   | HASH e=texte { Titre e }
-//   | HASH HASH e=texte { Sous_titre e }
-//   | e=texte { Paragraphe e }
-//   | b=item c=element { Liste [b; c] }
+
+document:
+  | e=corps EOF { Document e }
+
+corps:
+  | e=element NEWLINE NEWLINE b=corps { Corps (e , b) }
+  | e=element  { Corps_sing (e) }
+
+element:
+  | HASH e=texte { Titre e }
+  | HASH HASH e=texte { Sous_titre e }
+  | e=texte { Paragraphe e }
+  // | b=item c=element { Liste [b; c] }
 // item:
 //   | ITEM e=texte { Item e }
 texte:
@@ -33,10 +34,9 @@ texte:
 
 element_de_texte:
   | e=mot { e }
-  // | STAR e=mot STAR { Mot_italique e }
-  // | STAR STAR  e=mot STAR STAR  { Mot_gras e }
-  // | e=MOT { Mot e }
-  // | LBRACKET e=liste_mots RBRACKET LPAREN e2=mot RPAREN { Mot_lien (e,e2) }
+  | STAR e=element_de_texte STAR { Mot_italique e }
+  | STAR STAR e=element_de_texte STAR STAR  { Mot_gras e }
+  // | LBRACKET e=list(mot) RBRACKET LPAREN e2=mot RPAREN { Mot_lien (e,e2) }
 
 // liste_mots:
 //   | e=mot { [e] }
