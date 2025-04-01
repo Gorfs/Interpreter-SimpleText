@@ -2,7 +2,7 @@ open Ast
 
 let lexbuf = Lexing.from_channel stdin 
 
-let rec eval x lst = match x with  
+(* let rec eval x lst = match x with  
   | Var a -> snd(List.find(fun (x, _) -> x = a) lst)
   | True -> true
   | False -> false
@@ -22,7 +22,7 @@ let rec eval x lst = match x with
   | Not (l) -> not (eval l lst)
   | If (e1, e2, e3) -> 
     if eval e1 lst then eval e2 lst else eval e3 lst
-           
+            *)
 let ast = Parser.input Lexer.main lexbuf 
 
 let result = eval ast []

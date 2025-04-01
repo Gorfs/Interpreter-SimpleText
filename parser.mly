@@ -2,35 +2,46 @@
 open Ast
 %}
 
-%token AND OR LET ASSIGNMENT IN LPAREN RPAREN TRUE FALSE EOF AND_KW NOT IF THEN ELSE
-%token<string> ID 
+%token STAR ITEM NEWLINE EOF HASH LBRACKET RBRACKET LPAREN RPAREN
+%token<string> MOT 
 
-%start<Ast.expression> input
+%start<Ast.document> input
 
 
-%nonassoc THEN 
-%nonassoc ELSE
-%nonassoc IN
-%nonassoc NOT 
-// %nonassoc LET
-%right OR
-%right AND 
 %%
 
   
-input: c=expression EOF { c }
+input: c=document { c }
 
-expression:
-  | x=ID  { Var x }
-  | l=expression AND r=expression { And (l, r)}
-  | l=expression OR r=expression { Or (l, r) }
-  | TRUE { True }
-  | FALSE { False }
-  | LPAREN c=expression RPAREN { c }
-  | LET b1=separated_nonempty_list(AND_KW, definition) IN e2=expression { Let (b1, e2) }
-  | NOT e1=expression { Not e1 }
-  | IF e1=expression THEN e2=expression ELSE e3=expression { If (e1, e2, e3) }
-  | IF e1=expression THEN e2=expression  { If (e1, e2, False) }
+document:
+  | e=element_de_texte EOF { Document e }
 
-definition:
-    | x=ID ASSIGNMENT e=expression  { x, e }
+// corps:
+//   | e=element NEWLINE b=corps { e :: b }
+//   | e=element { [e] }
+// element:
+//   | HASH e=texte { Titre e }
+//   | HASH HASH e=texte { Sous_titre e }
+//   | e=texte { Paragraphe e }
+//   | b=item c=element { Liste [b; c] }
+// item:
+//   | ITEM e=texte { Item e }
+// texte:
+//   | e=element_de_texte { e }
+//   | e=element_de_texte e2=texte { e  }
+
+element_de_texte:
+  | e=mot { e }
+  | STAR e=mot STAR { Mot_italique e }
+  | STAR STAR  e=mot STAR STAR  { Mot_gras e }
+  | e=MOT { Mot e }
+  | LBRACKET e=liste_mots RBRACKET LPAREN e2=mot RPAREN { Mot_lien (e,e2) }
+
+liste_mots:
+  | e=mot { [e] }
+  | e=mot; e2=liste_mots { e :: e2}
+
+mot:
+ |e = MOT { Mot e} 
+
+  

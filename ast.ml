@@ -1,37 +1,44 @@
-type var = string
+
+type element_de_texte = 
+  | Mot of string 
+  | Mot_gras of (string list) 
+  | Mot_italique of (string list) 
+  | Mot_lien of  (string list) * string
+
+type texte = Texte of (element_de_texte list)
+
+type item = Item of texte
+
+type element = 
+| Titre of texte
+| Sous_titre of texte
+| Paragraphe of texte 
+| Liste of (item list) 
+
+type corps = Corps of (element list)
+
+type document = Document of element_de_texte 
 
 
-type expression =
-  | Var of var 
-  | True
-  | False
-  | Or of expression * expression
-  | And of expression * expression
-  | Assignment of expression * expression
-  | Let of (var * expression ) list * expression
-  | Not of expression
-  | If of expression * expression * expression
+
+let element_de_texte_to_string = function
+  | Mot m ->  m 
+  | Mot_gras ms -> "<b>" ^ (String.concat " " ms) ^ "</b>"
+  | Mot_italique ms -> "<i>" ^ (String.concat " " ms) ^ "</i>"
+  | Mot_lien (ms, url) -> "<a href=\"" ^ url ^ "\">" ^ (String.concat " " ms) ^ "</a>"
+
+let texte_to_string (Texte elements) =
+  String.concat " " (List.map element_de_texte_to_string elements)
+let item_to_string (Item texte) = texte_to_string texte
+let element_to_string = function
+  | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
+  | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
+  | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
+  | Liste items -> "<ul>" ^ (String.concat "" (List.map (fun item -> "<li>" ^ (item_to_string item) ^ "</li>") items)) ^ "</ul>"
+
+let corps_to_string (Corps elements) =
+  String.concat "\n" (List.map element_to_string elements)
+let document_to_string (Document corps) =
+  "<html><body>" ^ (corps_to_string corps) ^ "</body></html>"
 
 
-
-let rec as_string = function
-  | Var x -> x
-  | True -> "true"
-  | False -> "false"
-  | Assignment (x,y) -> as_string y ^ "=" ^ as_string x
-  | Or (l, r) -> apply "\\/" l r
-  | And (l, r) -> apply "/\\" l r
-  | Not (l) -> "not (" ^ as_string l ^ ")"
-  | If (e1, e2, e3) -> 
-    "if " ^ as_string e1 ^ " then " ^ as_string e2 ^ " else " ^ as_string e3
-  | Let (bindings, expr) ->
-      let rec bindings_str str =
-        match str with
-        | [] -> ""
-        | (a,b)::[] -> a ^ " = " ^ as_string b 
-        | (a,b)::c ->  a ^ " = " ^ as_string b ^ " and " ^ bindings_str c
-      in
-       "let " ^ bindings_str bindings ^ " in " ^ as_string expr
-
-and apply op l r = 
-  "(" ^ as_string l ^ ") " ^ op ^ " (" ^ as_string r ^ ")"
