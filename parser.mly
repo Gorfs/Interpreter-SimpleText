@@ -8,6 +8,7 @@ open Ast
 
 %start<Ast.document> input
 
+%right STAR
 
 %%
 input: c=document { c }
