@@ -34,11 +34,10 @@ try
 with 
   | e ->
     let pos = Lexing.lexeme_start_p lexbuf in
-    let line = pos.pos_lnum in
     let column = pos.pos_cnum - pos.pos_bol in
     let char = Lexing.lexeme lexbuf in
     Printf.printf "Error : %s\n" (Printexc.to_string e);
-    Printf.printf "Error at line %d, column %d: unexpected character '%s'\n" line column char;
+    Printf.printf "Error at column %d: unexpected character '%s'\n" column char;
     exit 1 
     
 let result = document_to_string ast 

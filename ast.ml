@@ -3,9 +3,9 @@ type mot = string
 type element_de_texte = 
   (* | Newline  *)
   | Mot of mot 
-  | Mot_gras of element_de_texte 
-  | Mot_italique of element_de_texte 
-  | Mot_lien of  (element_de_texte list) * element_de_texte 
+  | Mot_gras of mot list 
+  | Mot_italique of mot list 
+  | Mot_lien of  (mot list) * mot 
 
 type texte = 
 | Texte of (element_de_texte * texte)
@@ -32,12 +32,16 @@ type corps =
 type document = Document of corps 
 
 
+let rec mot_list_to_string = function
+  | [] -> ""
+  | [x] -> x
+  | x::xs -> x ^ " " ^ (mot_list_to_string xs)
 
 let rec element_de_texte_to_string = function
   | Mot m ->  m 
-  | Mot_gras ms -> "<b>" ^ (element_de_texte_to_string ms)  ^ "</b>"
-  | Mot_italique ms -> "<i>" ^ (element_de_texte_to_string ms) ^ "</i>"
-  | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string url) ^ "\">" ^ (String.concat " "  (List.map element_de_texte_to_string ms)) ^ "</a>"
+  | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
+  | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
+  | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
 
 let rec texte_to_string = function
   | Texte (e, t) -> (element_de_texte_to_string e) ^ (texte_to_string t)

@@ -3,7 +3,7 @@ open Parser
 }
 
 let layout = [ ' ' '\t' '\n' ]
-let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '{' '}' '[' ']' ]
+let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '(' ')' '[' ']' ]
 
 rule main = parse
   | layout		{ main lexbuf }
