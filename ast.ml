@@ -16,13 +16,14 @@ type element =
 | Titre of texte
 | Sous_titre of texte
 | Paragraphe of texte 
-| Liste of (item list) 
+| Liste of item list
 
 type corps =
 |  Corps of (element * corps)
 |  Corps_sing of element
 
 type document = Document of corps 
+
 
 
 let rec element_de_texte_to_string = function
@@ -35,13 +36,18 @@ let rec texte_to_string = function
   | Texte (e, t) -> (element_de_texte_to_string e) ^ (texte_to_string t)
   | Texte_vide -> ""
 
+let item_to_string (Item texte) = 
+  "<li>" ^ (texte_to_string texte) ^ "</li>"
 
 let element_to_string = function
   | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
   | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
   | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
-  | _ -> ""
-  (* | Liste items -> "<ul>" ^ (String.concat "" (List.map (fun item -> "<li>" ^ (item_to_string item) ^ "</li>") items)) ^ "</ul>" *)
+  | Liste items -> 
+      "<ul>" ^ 
+      (String.concat "" (List.map item_to_string items)) ^
+      "</ul>"
+
 
 let rec corps_to_string (corps) =
   match corps with 
