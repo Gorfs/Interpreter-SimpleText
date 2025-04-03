@@ -22,9 +22,25 @@ let lexbuf = Lexing.from_channel stdin
   | Not (l) -> not (eval l lst)
   | If (e1, e2, e3) -> 
     if eval e1 lst then eval e2 lst else eval e3 lst
-            *)
-let ast = Parser.input Lexer.main lexbuf 
+*)
 
+
+(* try and catch error *)
+
+
+let ast = 
+try
+  Parser.input Lexer.main lexbuf 
+with 
+  | e ->
+    let pos = Lexing.lexeme_start_p lexbuf in
+    let line = pos.pos_lnum in
+    let column = pos.pos_cnum - pos.pos_bol in
+    let char = Lexing.lexeme lexbuf in
+    Printf.printf "Error : %s\n" (Printexc.to_string e);
+    Printf.printf "Error at line %d, column %d: unexpected character '%s'\n" line column char;
+    exit 1 
+    
 let result = document_to_string ast 
 
-let _ = Printf.printf "Parse:\n%s\n" (result);
+let _ = Printf.printf "Parse:\n%s\n" result;
