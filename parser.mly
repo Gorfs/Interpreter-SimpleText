@@ -40,14 +40,15 @@ texte:
 
 element_de_texte:
   | e=mot { e }
-  | STAR STAR e=nonempty_list(string) STAR STAR  { Mot_gras e }
+  | STAR STAR e=nonempty_list(string) STAR STAR { Mot_gras e }
   | STAR e=nonempty_list(string) STAR { Mot_italique e }
   | LBRACKET e=nonempty_list(string) RBRACKET LPAREN e2=string RPAREN { Mot_lien (e,e2) }
 
-// liste_mots:
-//   | e=mot { [e] }
-//   | e=mot; e2=liste_mots { e :: e2}
 
 mot:
  |e = MOT { Mot e}
+ | LPAREN { Mot "("}
+ | RPAREN { Mot ")"}
+ | LBRACKET { Mot "["}
+ | RBRACKET { Mot "]" }
 

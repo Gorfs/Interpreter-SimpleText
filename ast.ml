@@ -44,7 +44,7 @@ let rec element_de_texte_to_string = function
   | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
 
 let rec texte_to_string = function
-  | Texte (e, t) -> (element_de_texte_to_string e) ^ (texte_to_string t)
+  | Texte (e, t) -> (element_de_texte_to_string e) ^ " " ^  (texte_to_string t)
   | Texte_vide -> ""
 
 let item_to_string (Item texte) = 
