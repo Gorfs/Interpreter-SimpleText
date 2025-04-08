@@ -1,10 +1,14 @@
 type mot = string
 
+type code_couleur = string
+
 type element_de_texte = 
-  | Mot of mot 
+  | Mot of mot
+  | Code_couleur of code_couleur
   | Mot_gras of mot list 
   | Mot_italique of mot list 
   | Mot_lien of (mot list) * mot
+  | Color of code_couleur * (mot list)
 
 type texte = 
 | Texte of (element_de_texte * texte)
@@ -35,10 +39,12 @@ let rec mot_list_to_string = function
   | x::xs -> x ^ " " ^ (mot_list_to_string xs)
 
 let rec element_de_texte_to_string = function
-  | Mot m ->  m 
+  | Mot m ->  m
+  | Code_couleur cc -> cc
   | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
   | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
+  | Color (cc, ms) -> "<span style=\"color: #" ^ (element_de_texte_to_string (Code_couleur cc)) ^ ";\">" ^ (mot_list_to_string ms) ^ "</span>"
 
 let rec texte_to_string = function
   | Texte_vide -> ""
