@@ -5,8 +5,6 @@ type element_de_texte =
   | Mot_gras of mot list 
   | Mot_italique of mot list 
   | Mot_lien of (mot list) * mot
-  | Mot_crochets of mot list
-  | Mot_parentheses of mot list
 
 type texte = 
 | Texte of (element_de_texte * texte)
@@ -41,8 +39,6 @@ let rec element_de_texte_to_string = function
   | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
   | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
-  | Mot_crochets ms -> "[" ^ (mot_list_to_string ms) ^ "]"
-  | Mot_parentheses ms -> "(" ^ (mot_list_to_string ms) ^ ")"
 
 let rec texte_to_string = function
   | Texte_vide -> ""

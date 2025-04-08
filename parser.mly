@@ -3,9 +3,8 @@ open Ast
 %}
 
 // %token STAR ITEM NEWLINE EOF HASH LBRACKET RBRACKET LPAREN RPAREN
-%token EOF HASH NEWLINE STAR ITEM RPAREN LPAREN LBRACKET RBRACKET
+%token EOF HASH NEWLINE ITALIC BOLD ITEM RPAREN LPAREN LBRACKET RBRACKET
 %token<string> MOT
-
 %start<Ast.document> input
 %%
 input: c=document { c }
@@ -36,16 +35,7 @@ texte:
   | e=element_de_texte e2=texte { Texte(e,e2) }
 
 element_de_texte:
-  | STAR STAR e=nonempty_list(string) STAR STAR { Mot_gras e }
-  | STAR e=nonempty_list(string) STAR { Mot_italique e }
-  | LBRACKET e=nonempty_list(string) RBRACKET LPAREN e2=string RPAREN { Mot_lien (e,e2) }
-  | LBRACKET e=nonempty_list(string) RBRACKET { Mot_crochets e }
-  | LPAREN e=nonempty_list(string) RPAREN { Mot_parentheses e }
-  | e=mot { e }
-
-mot:
+  | BOLD e=list(string) BOLD { Mot_gras e }
+  | ITALIC e=list(string) ITALIC { Mot_italique e }
+  | LBRACKET e=list(string) RBRACKET LPAREN e2=string RPAREN { Mot_lien (e,e2) }
   | e=MOT { Mot e }
-  | LBRACKET { Mot "["} 
-  | RBRACKET { Mot "]"}
-  | LPAREN { Mot "("}
-  | RPAREN { Mot ")"}

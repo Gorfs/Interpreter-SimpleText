@@ -8,7 +8,8 @@ let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '(' ')' '[' ']' ]
 rule main = parse
   | layout		{ main lexbuf }
   | '#' { HASH }
-  | "*" { STAR } 
+  | "*" { ITALIC }
+  | "**" { BOLD }
   | "\\item" { ITEM }
   | "(" { LPAREN }
   | ")" { RPAREN }
