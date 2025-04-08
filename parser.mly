@@ -15,7 +15,7 @@ document:
   | e=corps EOF { Document e }
 
 corps:
-  | e=element NEWLINE b=corps { Corps (e , b) }
+  | e=element nonempty_list(NEWLINE) b=corps { Corps (e , b) }
   | e=element  { Corps_sing (e) }
 
 element:
