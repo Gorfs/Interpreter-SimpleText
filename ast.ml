@@ -40,7 +40,7 @@ let rec mot_list_to_string = function
 
 let rec element_de_texte_to_string = function
   | Mot m ->  m
-  | Code_couleur cc -> cc
+  | Code_couleur cc -> "Code couleur :" ^ cc
   | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
   | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"

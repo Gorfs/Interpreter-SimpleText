@@ -2,8 +2,7 @@
 open Ast
 %}
 
-// %token STAR ITEM NEWLINE EOF HASH LBRACKET RBRACKET LPAREN RPAREN
-%token EOF HASH NEWLINE ITALIC BOLD ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE
+%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE
 %token<string> MOT COLOR_CODE
 %start<Ast.document> input
 %%
@@ -19,8 +18,8 @@ corps:
   | e=element  { Corps_sing (e) }
 
 element:
-  | HASH e=texte { Titre e }
-  | HASH HASH e=texte { Sous_titre e }
+  | TITLE e=texte { Titre e }
+  | SUBTITLE e=texte { Sous_titre e }
   | e=nonempty_list(item) { Liste e }  
   | e=texte { Paragraphe e }
 
@@ -42,5 +41,6 @@ element_de_texte:
   | BOLD e=list(string) BOLD { Mot_gras e }
   | ITALIC e=list(string) ITALIC { Mot_italique e }
   | LBRACKET e=list(string) RBRACKET LPAREN e2=string RPAREN { Mot_lien (e,e2) }
-  | COLOR e=color_code RBRACE LBRACE e2=list(string) RBRACE { Color (e,e2) }
+  | COLOR e=color_code LRBRACE e2=list(string) RBRACE { Color (e,e2) }
+  | e=COLOR_CODE { Code_couleur e }
   | e=MOT { Mot e }

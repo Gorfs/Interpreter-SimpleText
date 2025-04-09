@@ -3,19 +3,21 @@ open Parser
 }
 
 let layout = [ ' ' '\t' '\n' ]
-let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '(' ')' '[' ']' ]
+let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '(' ')' '[' ']' '{' '}']
 let hexa_char = ['0'-'9' 'A'-'F' 'a'-'f']
 
 rule main = parse
   | layout		{ main lexbuf }
-  | '#' { HASH }
-  | "*" { ITALIC }
+  | "##" { SUBTITLE }
+  | '#' { TITLE }
   | "**" { BOLD }
+  | "*" { ITALIC }
   | "\\item" { ITEM }
   | "(" { LPAREN }
   | ")" { RPAREN }
   | "[" { LBRACKET }
-  | "]" { RBRACKET } 
+  | "]" { RBRACKET }
+  | "}{" { LRBRACE }
   | "{" { LBRACE }
   | "}" { RBRACE }
   | "\n\n" { NEWLINE } 
