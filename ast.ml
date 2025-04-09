@@ -19,14 +19,15 @@ type item = Item of texte
 type item_list = 
 | Liste_item of (item * item_list)
 | Liste_vide
- 
+
 type element = 
 | Titre of texte
 | Sous_titre of texte
-| Paragraphe of texte 
+| Paragraphe of texte
 | Liste of item list
+| Liste_imbriquee of corps
 
-type corps =
+and corps =
 |  Corps of (element * corps)
 |  Corps_sing of element
 
@@ -40,7 +41,7 @@ let rec mot_list_to_string = function
 
 let rec element_de_texte_to_string = function
   | Mot m ->  m
-  | Code_couleur cc -> "Code couleur :" ^ cc
+  | Code_couleur cc -> cc
   | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
   | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
@@ -54,18 +55,17 @@ let rec texte_to_string = function
 let item_to_string (Item texte) = 
   "<li>" ^ (texte_to_string texte) ^ "</li>"
 
-
-let element_to_string = function
-  | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
-  | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
-  | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
-  | Liste items -> "<ul>" ^ (String.concat "" (List.map item_to_string items)) ^ "</ul>"
-
-
 let rec corps_to_string (corps) =
   match corps with 
   | Corps_sing e -> (element_to_string e) 
   | Corps (elmt , corps) -> (element_to_string elmt) ^ "<br/>" ^ (corps_to_string corps)
+
+and element_to_string = function
+  | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
+  | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
+  | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
+  | Liste items -> "<ul>" ^ "<p>" ^ (String.concat "" (List.map item_to_string items)) ^ "</p>" ^ "</ul>"
+  | Liste_imbriquee corps -> "<ul>" ^ "<li>" ^ (corps_to_string corps) ^ "</li>" ^ "</ul>"
 
 let document_to_string (Document doc) =
   "<html><body>" ^ (corps_to_string doc) ^ "</body></html>" 

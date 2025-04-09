@@ -20,7 +20,8 @@ corps:
 element:
   | TITLE e=texte { Titre e }
   | SUBTITLE e=texte { Sous_titre e }
-  | e=nonempty_list(item) { Liste e }  
+  | e=nonempty_list(item) { Liste e }
+  | ITEM LBRACE e=corps RBRACE { Liste_imbriquee e }
   | e=texte { Paragraphe e }
 
 item:
@@ -42,5 +43,4 @@ element_de_texte:
   | ITALIC e=list(string) ITALIC { Mot_italique e }
   | LBRACKET e=list(string) RBRACKET LPAREN e2=string RPAREN { Mot_lien (e,e2) }
   | COLOR e=color_code LRBRACE e2=list(string) RBRACE { Color (e,e2) }
-  | e=COLOR_CODE { Code_couleur e }
   | e=MOT { Mot e }
