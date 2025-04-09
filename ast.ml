@@ -58,7 +58,7 @@ let item_to_string (Item texte) =
 let rec corps_to_string (corps) =
   match corps with 
   | Corps_sing e -> (element_to_string e) 
-  | Corps (elmt , corps) -> (element_to_string elmt) ^ "<br/>" ^ (corps_to_string corps)
+  | Corps (elmt , corps) -> (element_to_string elmt) ^ (corps_to_string corps)
 
 and element_to_string = function
   | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
