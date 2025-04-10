@@ -1,35 +1,28 @@
 type mot = string
 
-type code_couleur = string
-
 type element_de_texte = 
   | Mot of mot
-  | Code_couleur of code_couleur
   | Mot_gras of mot list 
   | Mot_italique of mot list 
   | Mot_lien of (mot list) * mot
-  | Color of code_couleur * (mot list)
+  | Color of string * (mot list)
 
 type texte = 
-| Texte of (element_de_texte * texte)
-| Texte_vide
+| Texte of element_de_texte list
 
 type item = Item of texte
 
 type item_list = 
-| Liste_item of (item * item_list)
-| Liste_vide
+| Liste_item of item list
 
 type element = 
 | Titre of texte
 | Sous_titre of texte
 | Paragraphe of texte
 | Liste of item list
-| Liste_imbriquee of corps
 
-and corps =
-|  Corps of (element * corps)
-|  Corps_sing of element
+type corps =
+|  Corps of element list
 
 type document = Document of corps 
 
@@ -39,35 +32,29 @@ let rec mot_list_to_string = function
   | [x; y] -> x ^ " " ^ y
   | x::xs -> x ^ " " ^ (mot_list_to_string xs)
 
-let rec element_de_texte_to_string = function
-  | Mot m ->  m
-  | Code_couleur cc -> cc
+let element_de_texte_to_string = function
+  | Mot m -> m
   | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
-  | Mot_lien (ms, url) -> "<a href=\"" ^  (element_de_texte_to_string (Mot url)) ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
-  | Color (cc, ms) -> "<span style=\"color: #" ^ (element_de_texte_to_string (Code_couleur cc)) ^ ";\">" ^ (mot_list_to_string ms) ^ "</span>"
+  | Mot_lien (ms, url) -> "<a href=\"" ^ url ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
+  | Color (cc, ms) -> "<span style=\"color: #" ^ cc ^ ";\">" ^ (mot_list_to_string ms) ^ "</span>"
 
-let rec texte_to_string = function
-  | Texte_vide -> ""
-  | Texte (e, Texte_vide) -> element_de_texte_to_string e
-  | Texte (e, t) -> (element_de_texte_to_string e) ^ " " ^ (texte_to_string t)
+let texte_to_string (Texte elements) =
+  String.concat " " (List.map element_de_texte_to_string elements)
 
 let item_to_string (Item texte) = 
   "<li>" ^ (texte_to_string texte) ^ "</li>"
 
-let rec corps_to_string (corps) =
-  match corps with 
-  | Corps_sing e -> (element_to_string e) 
-  | Corps (elmt , corps) -> (element_to_string elmt) ^ (corps_to_string corps)
-
-and element_to_string = function
+let element_to_string = function
   | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
   | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
   | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
-  | Liste items -> "<ul>" ^ "<p>" ^ (String.concat "" (List.map item_to_string items)) ^ "</p>" ^ "</ul>"
-  | Liste_imbriquee corps -> "<ul>" ^ "<li>" ^ (corps_to_string corps) ^ "</li>" ^ "</ul>"
+  | Liste items -> "<ul>" ^ (String.concat "" (List.map item_to_string items)) ^ "</ul>"
+
+let corps_to_string (Corps elements) =
+  String.concat "" (List.map element_to_string elements)
 
 let document_to_string (Document doc) =
-  "<html><body>" ^ (corps_to_string doc) ^ "</body></html>" 
+  "<html><body>" ^ (corps_to_string doc) ^ "</body></html>"
 
 

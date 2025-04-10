@@ -8,20 +8,20 @@ open Ast
 %%
 input: c=document { c }
 
-
-
 document:
   | e=corps EOF { Document e }
 
 corps:
-  | e=element nonempty_list(NEWLINE) b=corps { Corps (e , b) }
-  | e=element  { Corps_sing (e) }
+  | e=element nonempty_list(NEWLINE) b=corps { 
+      match b with
+      | Corps elems -> Corps (e :: elems)
+    }
+  | e=element { Corps [e] }
 
 element:
   | TITLE e=texte { Titre e }
   | SUBTITLE e=texte { Sous_titre e }
   | e=nonempty_list(item) { Liste e }
-  | ITEM LBRACE e=corps RBRACE { Liste_imbriquee e }
   | e=texte { Paragraphe e }
 
 item:
@@ -31,8 +31,7 @@ string:
   | e=MOT { e }
 
 texte:
-  | e=element_de_texte { Texte(e, Texte_vide) }
-  | e=element_de_texte e2=texte { Texte(e,e2) }
+  | es=nonempty_list(element_de_texte) { Texte es }
 
 (* j'ai hésité entre faire ça du côté du parser ou du lexer, mais je trouve ça plus logique de faire ça du côté du lexer *)
 color_code:
