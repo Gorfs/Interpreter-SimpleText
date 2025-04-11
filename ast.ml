@@ -1,11 +1,9 @@
-type mot = string
-
 type element_de_texte = 
-  | Mot of mot
-  | Mot_gras of mot list 
-  | Mot_italique of mot list 
-  | Mot_lien of (mot list) * mot
-  | Color of string * (mot list)
+  | Mot of string
+  | Mot_gras of string list 
+  | Mot_italique of string list 
+  | Mot_lien of (string list) * string
+  | Color of string * (string list)
 
 type texte = 
 | Texte of element_de_texte list
@@ -20,8 +18,9 @@ type element =
 | Sous_titre of texte
 | Paragraphe of texte
 | Liste of item list
+| Liste_imbriquee of corps
 
-type corps =
+and corps =
 |  Corps of element list
 
 type document = Document of corps 
@@ -45,13 +44,14 @@ let texte_to_string (Texte elements) =
 let item_to_string (Item texte) = 
   "<li>" ^ (texte_to_string texte) ^ "</li>"
 
-let element_to_string = function
+let rec element_to_string = function
   | Titre texte -> "<h1>" ^ (texte_to_string texte) ^ "</h1>"
   | Sous_titre texte -> "<h2>" ^ (texte_to_string texte) ^ "</h2>"
   | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
   | Liste items -> "<ul>" ^ (String.concat "" (List.map item_to_string items)) ^ "</ul>"
+  | Liste_imbriquee corps -> "<ul>" ^ "<li>" ^ (corps_to_string corps) ^ "</li>" ^ "</ul>"
 
-let corps_to_string (Corps elements) =
+and corps_to_string (Corps elements) =
   String.concat "" (List.map element_to_string elements)
 
 let document_to_string (Document doc) =

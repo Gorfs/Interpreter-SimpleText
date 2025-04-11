@@ -22,6 +22,7 @@ element:
   | TITLE e=texte { Titre e }
   | SUBTITLE e=texte { Sous_titre e }
   | e=nonempty_list(item) { Liste e }
+  | ITEM LBRACE e=corps RBRACE { Liste_imbriquee e }
   | e=texte { Paragraphe e }
 
 item:
