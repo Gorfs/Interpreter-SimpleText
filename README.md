@@ -7,6 +7,12 @@ Cree un interpreteur Ocaml-Menhir d'un language semi-latex semi-markdown
 
 Deadline : 17 mai 2025 a 23h59
 
+Notes:
+
+Pour les listes imbriquer:
+c'etait pas preeciser si on permet une espace entre le "/item" et le "{" donc on a laisser
+la possibilite de laisser l'espace
+
 AUTHORS:
 
 Archie Beales 22201677
