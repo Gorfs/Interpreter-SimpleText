@@ -1,12 +1,19 @@
-type element_de_texte = 
-  | Mot of string
-  | Mot_gras of string list 
-  | Mot_italique of string list 
-  | Mot_lien of (string list) * string
-  | Color of string * (string list)
+type texte_rich = 
+| Texte_gras of string list
+| Texte_italique of string list
+| Texte_rich of string list
+| Mot of string
+
+type texte_couleur =
+| Texte_couleur of string * texte_rich list
+| Texte_sans_couleur of texte_rich
+
+type texte_lien =
+| Texte_lien of texte_couleur list * string
+| Texte_sans_lien of texte_couleur
 
 type texte = 
-| Texte of element_de_texte list
+| Texte of texte_lien list
 
 type item = Item of texte
 
@@ -31,15 +38,22 @@ let rec mot_list_to_string = function
   | [x; y] -> x ^ " " ^ y
   | x::xs -> x ^ " " ^ (mot_list_to_string xs)
 
-let element_de_texte_to_string = function
+let texte_rich_to_string = function
+  | Texte_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
+  | Texte_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
+  | Texte_rich ms -> "<b><i>" ^ (mot_list_to_string ms) ^ "</i></b>"
   | Mot m -> m
-  | Mot_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
-  | Mot_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
-  | Mot_lien (ms, url) -> "<a href=\"" ^ url ^ "\">" ^ (mot_list_to_string ms) ^ "</a>"
-  | Color (cc, ms) -> "<span style=\"color: #" ^ cc ^ ";\">" ^ (mot_list_to_string ms) ^ "</span>"
+
+let texte_couleur_to_string = function
+  | Texte_couleur (cc, ms) -> "<span style=\"color: #" ^ cc ^ ";\">" ^ String.concat " " (List.map texte_rich_to_string ms) ^ "</span>"
+  | Texte_sans_couleur ms -> texte_rich_to_string ms
+
+let texte_lien_to_string = function
+  | Texte_lien (ms, url) -> "<a href=\"" ^ url ^ "\">" ^ String.concat " " (List.map texte_couleur_to_string ms) ^ "</a>"
+  | Texte_sans_lien ms -> texte_couleur_to_string ms
 
 let texte_to_string (Texte elements) =
-  String.concat " " (List.map element_de_texte_to_string elements)
+  String.concat " " (List.map texte_lien_to_string elements)
 
 let item_to_string (Item texte) = 
   "<li>" ^ (texte_to_string texte) ^ "</li>"
