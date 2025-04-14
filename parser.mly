@@ -5,7 +5,6 @@ open Ast
 %token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE
 %token<string> MOT COLOR_CODE
 %start<Ast.document> input
-%right NEWLINE
 %%
 input: c=document { c }
 
@@ -30,7 +29,7 @@ item:
   | ITEM e=texte { Item e}
 
 texte:
-  | es=list(texte_lien) { Texte es }
+  | es=nonempty_list(texte_lien) { Texte es }
 
 texte_lien:
   | LBRACKET e=list(texte_couleur) RBRACKET LPAREN e2=MOT RPAREN { Texte_lien (e,e2) }
