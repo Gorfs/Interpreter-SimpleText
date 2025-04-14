@@ -1,17 +1,28 @@
 open Ast
 open Macros
 
-let replace_with_def mot = match get_definition mot with
-  | [] -> mot
-  | l -> String.concat " " l
 
-(* Fonction pour remplacer les mots par leurs definitions *)
+(* Fonction pour convertir les mot individuelle en string, avec remplacement macro *)
+let mot_to_string mot = 
+  (* on regarder si le mot commence par "\\"*)
+  if String.length mot > 0 && mot.[0] = '\\' then
+  (* on donne le remplacement *)
+  let mot = String.sub mot 1 (String.length mot - 1) in
+  let remplacement = get_definition mot in
+  match remplacement with
+  | [] ->raise(Failure ("Erreur: le macro " ^ mot ^ " n'existe pas")) 
+  | a -> List.fold_left (fun acc x -> acc ^ " " ^ x) "" a
+
+    else
+    mot
+
+
 (* Fonctions pour convertir une ast en string/document HTML  *)
 let rec mot_list_to_string = function
   | [] -> ""
-  | [x] -> (replace_with_def x) 
-  | [x; y] -> (replace_with_def x) ^ " " ^ (replace_with_def y) 
-  | x::xs -> (replace_with_def x) ^ " " ^ (mot_list_to_string xs)
+  | [x] -> (mot_to_string x) 
+  | [x; y] -> (mot_to_string x) ^ " " ^ (mot_to_string y) 
+  | x::xs -> (mot_to_string x) ^ " " ^ (mot_list_to_string xs)
 
 let texte_rich_to_string = function
   | Texte_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"

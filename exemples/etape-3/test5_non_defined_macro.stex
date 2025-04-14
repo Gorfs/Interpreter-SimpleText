@@ -9,4 +9,5 @@ this is some starting texte, and a
 \item \date 
 \item \gret
 \item \car
+\item \non_macro
 \enddocument

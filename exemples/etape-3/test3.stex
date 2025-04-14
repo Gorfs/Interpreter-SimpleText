@@ -1,4 +1,4 @@
 \define{gret}{Hello my name is Archie, what is yours?}
 \begindocument
-this is some starting texte, and a gret
+this is some starting texte, and a \gret
 \enddocument

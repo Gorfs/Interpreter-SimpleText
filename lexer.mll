@@ -3,7 +3,7 @@
 }
 
 let layout = [ ' ' '\t' '\n' ]
-let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '(' ')' '[' ']' '{' '}']
+let ident_char = [^ ' ' '\t' '*' '\n' '#' '(' ')' '[' ']' '{' '}']
 let hexa_char = ['0'-'9' 'A'-'F' 'a'-'f']
 
   rule main = parse
