@@ -7,7 +7,10 @@ let mot_to_string mot =
   (* on regarder si le mot commence par "\\"*)
   if String.length mot > 0 && mot.[0] = '\\' then
   (* on donne le remplacement *)
-  let mot = String.sub mot 1 (String.length mot - 1) in
+
+    (* avant on enlever les backslash mais au final pas besoin *)
+  (*let mot = String.sub mot 1 (String.length mot - 1) in*)
+
   let remplacement = get_definition mot in
   match remplacement with
   | [] ->raise(Failure ("Erreur: le macro " ^ mot ^ " n'existe pas")) 
