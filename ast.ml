@@ -1,9 +1,10 @@
-
 type texte_rich = 
 | Texte_gras of string list
 | Texte_italique of string list
 | Texte_rich of string list
 | Mot of string
+
+type definition = Definition of string * (string list)
 
 type texte_couleur =
 | Texte_couleur of string * texte_rich list
@@ -31,14 +32,8 @@ type element =
 and corps =
 |  Corps of element list
 
-type definition =  Definition of string * (string list)
+type document = Document of corps 
 
-
-type document = Document of corps * definition list 
-
-let definition_to_string = function
-  | (_,b) -> b
-    
 
 let rec mot_list_to_string = function
   | [] -> ""
@@ -76,7 +71,10 @@ let rec element_to_string = function
 and corps_to_string (Corps elements) =
   String.concat "" (List.map element_to_string elements)
 
-let document_to_string (Document (doc, _)) =
+let document_to_string (Document doc) =
   "<html><body>" ^ (corps_to_string doc) ^ "</body></html>"
 
+let ast_to_string ast =
+  match ast with
+  | Document doc -> document_to_string (Document doc)
 

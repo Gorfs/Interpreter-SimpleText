@@ -1,6 +1,8 @@
 %{
 open Ast
+open Macros
 %}
+
 
 %token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE BEGINDOC ENDDOC DEFINE 
 %token<string> MOT COLOR_CODE
@@ -9,10 +11,10 @@ open Ast
 input: c=document { c }
 
 document:
-  | start=list(definition)BEGINDOC e=corps ENDDOC EOF { Document (e,start) }
+  | list(definition)BEGINDOC e=corps ENDDOC EOF { Document (e) }
 
 definition:
-      | DEFINE word=MOT LRBRACE replacement=nonempty_list(MOT) RBRACE { Definition (word,replacement) }
+  | DEFINE word=MOT LRBRACE replacement=nonempty_list(MOT) RBRACE { add_definition word replacement; () }
 
 corps:
   | e=element nonempty_list(NEWLINE) b=corps { 
@@ -46,4 +48,4 @@ texte_rich:
   | BOLD e=list(MOT) BOLD { Texte_gras e }
   | ITALIC e=list(MOT) ITALIC { Texte_italique e }
   | RICH e=list(MOT) RICH {Texte_rich e }
-  | e=MOT { Mot e }
+  | e=MOT {Mot e}
