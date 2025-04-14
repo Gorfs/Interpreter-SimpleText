@@ -2,14 +2,17 @@
 open Ast
 %}
 
-%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE
+%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE BEGINDOC ENDDOC DEFINE 
 %token<string> MOT COLOR_CODE
 %start<Ast.document> input
 %%
 input: c=document { c }
 
 document:
-  | e=corps EOF { Document e }
+  | start=list(definition)BEGINDOC e=corps ENDDOC EOF { Document (e,start) }
+
+definition:
+      | DEFINE word=MOT LRBRACE replacement=nonempty_list(MOT) RBRACE { Definition (word,replacement) }
 
 corps:
   | e=element nonempty_list(NEWLINE) b=corps { 
