@@ -1,7 +1,6 @@
 open Ast
 open Macros
 
-
 (* Fonction pour convertir les mot individuelle en string, avec remplacement macro *)
 let mot_to_string mot = 
   (* on regarder si le mot commence par "\\"*)

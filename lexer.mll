@@ -9,7 +9,7 @@ let hexa_char = ['0'-'9' 'A'-'F' 'a'-'f']
   rule main = parse
     | layout		{ main lexbuf }
   | "##" { SUBTITLE }
-  | '#' { TITLE }
+  | "#" { TITLE }
   | "***" { RICH }
   | "**" { BOLD }
   | "*" { ITALIC }
