@@ -1,0 +1,20 @@
+\define{\monnom}{Archie Beales}
+
+\begindocument
+# Titre du document
+
+## Section 1 : Introduction
+
+Ceci est un paragraphe de texte. Il présente \monnom. Il explique les *concepts de base* de SimpleText.
+
+Un autre paragraphe, séparé par une ligne vide.
+
+\item Premier élément d'une liste.
+\item Deuxième élément, avec du **texte en gras**.
+
+## Section 2 : Plus de détails
+
+Un paragraphe avec du texte en *italique* et en **gras**.
+\enddocument
+
+Ce texte est ignoré.

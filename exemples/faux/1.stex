@@ -1,0 +1,14 @@
+\define{badmacro No closing brace
+
+\begindocument
+# Titre incorrect (missing newline)## Sous-titre
+
+This paragraph has *unclosed italic tag.
+
+\item List item with [bad link](spaced url)
+
+\item  Nested list item without proper indentation
+\item Second item
+
+\enddocument
+Extra Text after enddocument

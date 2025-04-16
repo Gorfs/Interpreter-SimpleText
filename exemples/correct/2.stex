@@ -1,0 +1,27 @@
+\define{\important}{IMPORTANT:}
+\define{\courslink}{[Lien vers le cours](https://lienMoodle/ga6)}
+
+\begindocument
+# Guide d'utilisation de SimpleText
+
+## Introduction
+
+Ce document explique comment utiliser *SimpleText* pour formater vos documents.
+
+\important Veuillez lire attentivement ce guide.
+
+## Listes
+
+\item Voici une liste à puces :
+    \item Premier élément.
+    \item Deuxième élément, avec un \courslink.
+    \item Troisième élément, contenant une sous-liste :
+        \item Sous-élément 1.
+        \item Sous-élément 2.
+
+## Conclusion
+
+J'espère que ce guide vous sera utile.
+
+\enddocument
+
