@@ -1,6 +1,5 @@
 \define{\important}{IMPORTANT:}
 \define{\courslink}{[Lien vers le cours](https://lienMoodle/ga6)}
-
 \begindocument
 # Guide d'utilisation de SimpleText
 
@@ -22,6 +21,5 @@ Ce document explique comment utiliser *SimpleText* pour formater vos documents.
 ## Conclusion
 
 J'espère que ce guide vous sera utile.
-
 \enddocument
 

@@ -6,7 +6,6 @@ type  texte_rich =
 | Texte_rich of string list
 | Mot of string
 
-type  definition = Definition of string * (string list)
 
 type  texte_couleur =
 | Texte_couleur of string * texte_rich list
@@ -18,6 +17,9 @@ type texte_lien =
 
 type texte = 
 | Texte of texte_lien list
+
+
+type  definition = Definition of string * (texte)
 
 type item = Item of texte
 

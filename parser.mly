@@ -11,10 +11,10 @@ open Macros
 input: c=document { c }
 
 document:
-  | list(definition)BEGINDOC e=corps ENDDOC EOF { Document (e) }
+  | list(definition)BEGINDOC e=corps ENDDOC list(MOT) EOF { Document (e) }
 
 definition:
-  | DEFINE word=MOT LRBRACE replacement=nonempty_list(MOT) RBRACE { add_definition word replacement; () }
+  | DEFINE word=MOT LRBRACE replacement=texte RBRACE { add_definition word (replacement); () }
 
 corps:
   | e=element nonempty_list(NEWLINE) b=corps { 

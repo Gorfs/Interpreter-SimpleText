@@ -1,5 +1,4 @@
 \define{badmacro No closing brace
-
 \begindocument
 # Titre incorrect (missing newline)## Sous-titre
 

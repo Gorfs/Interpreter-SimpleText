@@ -2,48 +2,48 @@ open Ast
 open Macros
 
 (* Fonction pour convertir les mot individuelle en string, avec remplacement macro *)
-let mot_to_string mot = 
+let rec mot_to_string mot = 
   (* on regarder si le mot commence par "\\"*)
   if String.length mot > 0 && mot.[0] = '\\' then
-  (* on donne le remplacement *)
-
-    (* avant on enlever les backslash mais au final pas besoin *)
-  (*let mot = String.sub mot 1 (String.length mot - 1) in*)
-
-  let remplacement = get_definition mot in
-  match remplacement with
-  | [] ->raise(Failure ("Erreur: le macro " ^ mot ^ " n'existe pas")) 
-  | a -> List.fold_left (fun acc x -> acc ^ " " ^ x) "" a
-
-    else
+    (* on regarde si le mot est une macro *)  
+    (* print mot *)
+    let _ = Printf.printf "mot: %s\n" mot in
+    let remplacement = get_definition mot in
+    match remplacement with
+    | Texte [] -> 
+      (* si la macro n'existe pas, on renvoie le mot tel quel *)
+      let _ = Printf.printf "pas de remplacement : %s\n" mot in
+      raise(Failure("Erreur: la macro " ^ mot ^ " n'existe pas"))
+    | a -> let _ = Printf.printf "remplacement : %s\n" (texte_to_string a) in 
+      texte_to_string a
+  else
     mot
 
-
 (* Fonctions pour convertir une ast en string/document HTML  *)
-let rec mot_list_to_string = function
+and mot_list_to_string = function
   | [] -> ""
   | [x] -> (mot_to_string x) 
   | [x; y] -> (mot_to_string x) ^ " " ^ (mot_to_string y) 
   | x::xs -> (mot_to_string x) ^ " " ^ (mot_list_to_string xs)
 
-let texte_rich_to_string = function
+and texte_rich_to_string = function
   | Texte_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Texte_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
   | Texte_rich ms -> "<b><i>" ^ (mot_list_to_string ms) ^ "</i></b>"
   | Mot m -> mot_list_to_string [m]
 
-let texte_couleur_to_string = function
+and texte_couleur_to_string = function
   | Texte_couleur (cc, ms) -> "<span style=\"color: #" ^ cc ^ ";\">" ^ String.concat " " (List.map texte_rich_to_string ms) ^ "</span>"
   | Texte_sans_couleur ms -> texte_rich_to_string ms
 
-let texte_lien_to_string = function
+and texte_lien_to_string = function
   | Texte_lien (ms, url) -> "<a href=\"" ^ url ^ "\">" ^ String.concat " " (List.map texte_couleur_to_string ms) ^ "</a>"
   | Texte_sans_lien ms -> texte_couleur_to_string ms
 
-let texte_to_string (Texte elements) =
+and texte_to_string (Texte elements) =
   String.concat " " (List.map texte_lien_to_string elements)
 
-let item_to_string (Item texte) = 
+and item_to_string (Item texte) = 
   "<li>" ^ (texte_to_string texte) ^ "</li>"
 
 let rec element_to_string = function
@@ -82,5 +82,9 @@ let ast =
 let definitions = get_definitions () 
 let result = ast_to_string (ast) 
 
-let _ = Printf.printf "Definitions:\n%s\n" (String.concat "\n" (List.map (fun (k, v) -> k ^ " : " ^ String.concat ", " v) (StringMap.bindings definitions)))
-  let _ = Printf.printf "Parse:\n%s\n" result 
+(* Print the definitons *)
+let _ = 
+  Printf.printf "Definitions:\n";
+  StringMap.iter (fun k v -> Printf.printf "%s: %s\n" k (texte_to_string v)) definitions
+(* Print the result *)
+let _ = Printf.printf "Parse:\n%s\n" result 
