@@ -32,8 +32,20 @@ and texte_rich_to_string = function
   | Texte_rich ms -> "<b><i>" ^ (mot_list_to_string ms) ^ "</i></b>"
   | Mot m -> mot_list_to_string [m]
 
+
 and texte_couleur_to_string = function
-  | Texte_couleur (cc, ms) -> "<span style=\"color: #" ^ cc ^ ";\">" ^ String.concat " " (List.map texte_rich_to_string ms) ^ "</span>"
+  | Texte_couleur (cc, ms) -> 
+      let color_code = if String.length cc > 0 && cc.[0] = '\\' then
+        (* si c'est un macro alors on prend ca def *)
+        let remplacement = get_definition cc in
+        match remplacement with
+        | Texte [Texte_sans_lien (Texte_sans_couleur (Mot code))] -> code
+        | _ -> "000000" 
+      else 
+        cc 
+      in
+      "<span style=\"color:" ^ color_code ^ ";\">" ^ 
+      String.concat " " (List.map texte_rich_to_string ms) ^ "</span>"
   | Texte_sans_couleur ms -> texte_rich_to_string ms
 
 and texte_lien_to_string = function
@@ -64,7 +76,6 @@ let ast_to_string ast =
   | Document doc -> document_to_string (Document doc)
 
 
-(* Main function *)
 let lexbuf = Lexing.from_channel stdin 
 let ast = 
   begin 
@@ -81,10 +92,9 @@ let ast =
     end
 let definitions = get_definitions () 
 let result = ast_to_string (ast) 
-
-(* Print the definitons *)
-let _ = 
-  Printf.printf "Definitions:\n";
-  StringMap.iter (fun k v -> Printf.printf "%s: %s\n" k (texte_to_string v)) definitions
+(* fonction pour print les definition. utiliser pour le debug *)
+(* let _ =  *)
+  (* Printf.printf "Definitions:\n"; *)
+  (* StringMap.iter (fun k v -> Printf.printf "%s: %s\n" k (texte_to_string v)) definitions *)
 (* Print the result *)
-let _ = Printf.printf "Parse:\n%s\n" result 
+let _ = Printf.printf "%s\n" result

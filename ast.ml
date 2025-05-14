@@ -7,7 +7,7 @@ type  texte_rich =
 | Mot of string
 
 
-type  texte_couleur =
+type texte_couleur =
 | Texte_couleur of string * texte_rich list
 | Texte_sans_couleur of texte_rich
 
@@ -36,4 +36,4 @@ type element =
 and corps =
 |  Corps of element list
 
-type document = Document of corps 
+type document = Document of corps

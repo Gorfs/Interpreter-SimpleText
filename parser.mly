@@ -5,23 +5,23 @@ open Macros
 
 
 %token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE BEGINDOC ENDDOC DEFINE 
-%token<string> MOT COLOR_CODE
+%token<string> MOT 
 %start<Ast.document> input
 %%
 input: c=document { c }
 
 document:
-  | list(definition)BEGINDOC e=corps ENDDOC list(MOT) EOF { Document (e) }
+  | list(definition) BEGINDOC option(NEWLINE) e=corps ENDDOC option(NEWLINE) list(MOT) EOF { Document (e) }
 
 definition:
-  | DEFINE word=MOT LRBRACE replacement=texte RBRACE { add_definition word (replacement); () }
+  | DEFINE word=MOT LRBRACE option(TITLE) replacement=texte RBRACE { add_definition word (replacement); () }
 
 corps:
   | e=element nonempty_list(NEWLINE) b=corps { 
       match b with
       | Corps elems -> Corps (e :: elems)
     }
-  | e=element { Corps [e] }
+  | e=element option(NEWLINE) { Corps [e] }
 
 element:
   | TITLE e=texte { Titre e }
@@ -41,7 +41,7 @@ texte_lien:
   | e=texte_couleur { Texte_sans_lien e }
 
 texte_couleur:
-  | COLOR e=COLOR_CODE LRBRACE e2=list(texte_rich) RBRACE { Texte_couleur (e,e2) }
+  | COLOR option(TITLE) e=MOT LRBRACE e2=list(texte_rich) RBRACE { Texte_couleur (e, e2) }
   | e=texte_rich { Texte_sans_couleur e }
 
 texte_rich:

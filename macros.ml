@@ -9,7 +9,7 @@ let def_map : map ref = ref StringMap.empty
 
 let get_definition cle =  
   try
-    let _ = Printf.printf "get_definition cle:%s\n" cle in
+    (* let _ = Printf.printf "get_definition cle:%s\n" cle in *)
     StringMap.find cle !def_map
   with Not_found -> Texte []
 
