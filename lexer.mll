@@ -1,15 +1,15 @@
 {
-open Parser
+  open Parser
 }
 
 let layout = [ ' ' '\t' '\n' ]
-let ident_char = [^ ' ' '\t' '*' '\\' '\n' '#' '(' ')' '[' ']' '{' '}']
+let ident_char = [^ ' ' '\t' '*' '\n' '(' ')' '[' ']' '{' '}' ] 
 let hexa_char = ['0'-'9' 'A'-'F' 'a'-'f']
 
 rule main = parse
   | layout		{ main lexbuf }
   | "##" { SUBTITLE }
-  | '#' { TITLE }
+  | "#" { TITLE }
   | "***" { RICH }
   | "**" { BOLD }
   | "*" { ITALIC }
@@ -18,12 +18,19 @@ rule main = parse
   | ")" { RPAREN }
   | "[" { LBRACKET }
   | "]" { RBRACKET }
-  | "}{" { LRBRACE }
+  | "}{" { LRBRACE } 
   | "{" { LBRACE }
   | "}" { RBRACE }
-  | "\n\n" { NEWLINE } 
+  | "true" { TRUE }
+  | "false" { FALSE }
+  | "\\define{" {DEFINE}
+  | "\\boolean{" { BOOLEAN }
   | "\\color{" { COLOR }
-  | hexa_char hexa_char hexa_char hexa_char hexa_char hexa_char { COLOR_CODE (Lexing.lexeme lexbuf) }
+  | "\\if" { IF }
+  | "\\begindocument" { BEGINDOC }
+  | "\\enddocument" { ENDDOC }
+  | "\n\n"+ { NEWLINE } 
+  (* | "#" hexa_char hexa_char hexa_char hexa_char hexa_char hexa_char { COLOR_CODE (Lexing.lexeme lexbuf) } *) (* j'ai decider de laisser n'importe dans le span des couleurs comme le span peut accepter plein de format different*)
   | ident_char+		{ MOT (Lexing.lexeme lexbuf) }
   | eof			{ EOF }
   | _			{ failwith "unexpected character" }

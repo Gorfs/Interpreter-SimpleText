@@ -1,0 +1,14 @@
+\define{gret}{Hello my name is Archie, what is yours?}
+\define{gret}{Hello my name is Archie, what is yours?}
+\define{date}{14th april 1945}
+\define{car}{automobile}
+\begindocument
+this is some starting texte, and a
+
+#this is a title
+
+\item \date 
+\item \gret
+\item \car
+\item \non_macro
+\enddocument
