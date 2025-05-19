@@ -64,6 +64,9 @@ let rec element_to_string = function
   | Paragraphe texte -> "<p>" ^ (texte_to_string texte) ^ "</p>"
   | Liste items -> "<ul>" ^ (String.concat "" (List.map item_to_string items)) ^ "</ul>"
   | Liste_imbriquee corps -> "<ul>" ^ "<li>" ^ (corps_to_string corps) ^ "</li>" ^ "</ul>"
+  | If_condition (condition_name, value) -> 
+      let condition_value = get_boolean condition_name in
+      if condition_value then  (corps_to_string value) else ""
 
 and corps_to_string (Corps elements) =
   String.concat "" (List.map element_to_string elements)
@@ -91,6 +94,7 @@ let ast =
       exit 1 
     end
 let definitions = get_definitions () 
+
 let result = ast_to_string (ast) 
 (* fonction pour print les definition. utiliser pour le debug *)
 (* let _ =  *)

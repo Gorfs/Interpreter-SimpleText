@@ -21,11 +21,15 @@ rule main = parse
   | "}{" { LRBRACE } 
   | "{" { LBRACE }
   | "}" { RBRACE }
+  | "true" { TRUE }
+  | "false" { FALSE }
   | "\\define{" {DEFINE}
+  | "\\boolean{" { BOOLEAN }
   | "\\color{" { COLOR }
+  | "\\if" { IF }
   | "\\begindocument" { BEGINDOC }
   | "\\enddocument" { ENDDOC }
-  | "\n\n" { NEWLINE } 
+  | "\n\n"+ { NEWLINE } 
   (* | "#" hexa_char hexa_char hexa_char hexa_char hexa_char hexa_char { COLOR_CODE (Lexing.lexeme lexbuf) } *) (* j'ai decider de laisser n'importe dans le span des couleurs comme le span peut accepter plein de format different*)
   | ident_char+		{ MOT (Lexing.lexeme lexbuf) }
   | eof			{ EOF }

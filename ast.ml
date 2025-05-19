@@ -20,6 +20,8 @@ type texte =
 
 
 type  definition = Definition of string * (texte)
+(* string = /bool_value*)
+(* type if_condition = If_condition of string * (texte) *)
 
 type item = Item of texte
 
@@ -32,8 +34,10 @@ type element =
 | Paragraphe of texte
 | Liste of item list
 | Liste_imbriquee of corps
+| If_condition of string * (corps) 
 
 and corps =
 |  Corps of element list
 
 type document = Document of corps
+(* comme les macros sont définies dans le corps, on a pas besoin de les stocker dans le AST *)

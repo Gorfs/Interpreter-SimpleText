@@ -4,17 +4,21 @@ open Macros
 %}
 
 
-%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE BEGINDOC ENDDOC DEFINE 
+%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE BEGINDOC ENDDOC DEFINE TRUE FALSE BOOLEAN IF
 %token<string> MOT 
 %start<Ast.document> input
 %%
 input: c=document { c }
+boolean: 
+  | TRUE { true }
+  | FALSE { false }
 
 document:
   | list(definition) BEGINDOC option(NEWLINE) e=corps ENDDOC option(NEWLINE) list(MOT) EOF { Document (e) }
 
 definition:
-  | DEFINE word=MOT LRBRACE option(TITLE) replacement=texte RBRACE { add_definition word (replacement); () }
+  | DEFINE word=MOT LRBRACE option(TITLE)  (*title possible pour le hex*) replacement=texte RBRACE { add_definition word (replacement); () }
+  | BOOLEAN word=MOT LRBRACE replacement=boolean RBRACE { add_boolean word (replacement); ()}
 
 corps:
   | e=element nonempty_list(NEWLINE) b=corps { 
@@ -28,6 +32,7 @@ element:
   | SUBTITLE e=texte { Sous_titre e }
   | e=nonempty_list(item) { Liste e }
   | ITEM LBRACE e=corps RBRACE { Liste_imbriquee e }
+  | IF element=MOT LBRACE e=corps RBRACE { If_condition (element, e) } 
   | e=texte { Paragraphe e }
 
 item:
