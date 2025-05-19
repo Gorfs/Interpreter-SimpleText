@@ -1,1 +1,9 @@
-** *test* **
+Ceci est un test
+
+**Ceci est un test**
+
+*Ceci est un test*
+
+***Ceci est un test*** **test**
+
+[Du texte \color{FF0000}{***en rouge***}](www.thisisalink.com)

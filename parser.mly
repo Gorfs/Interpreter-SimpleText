@@ -2,9 +2,10 @@
 open Ast
 %}
 
-%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE
+%token EOF TITLE SUBTITLE NEWLINE ITALIC BOLD RICH ITEM RPAREN LPAREN LBRACKET RBRACKET COLOR LBRACE RBRACE LRBRACE
 %token<string> MOT COLOR_CODE
 %start<Ast.document> input
+%right NEWLINE
 %%
 input: c=document { c }
 
@@ -29,11 +30,18 @@ item:
   | ITEM e=texte { Item e}
 
 texte:
-  | es=nonempty_list(element_de_texte) { Texte es }
+  | es=list(texte_lien) { Texte es }
 
-element_de_texte:
-  | BOLD e=list(MOT) BOLD { Mot_gras e }
-  | ITALIC e=list(MOT) ITALIC { Mot_italique e }
-  | LBRACKET e=list(MOT) RBRACKET LPAREN e2=MOT RPAREN { Mot_lien (e,e2) }
-  | COLOR e=COLOR_CODE LRBRACE e2=list(MOT) RBRACE { Color (e,e2) }
+texte_lien:
+  | LBRACKET e=list(texte_couleur) RBRACKET LPAREN e2=MOT RPAREN { Texte_lien (e,e2) }
+  | e=texte_couleur { Texte_sans_lien e }
+
+texte_couleur:
+  | COLOR e=COLOR_CODE LRBRACE e2=list(texte_rich) RBRACE { Texte_couleur (e,e2) }
+  | e=texte_rich { Texte_sans_couleur e }
+
+texte_rich:
+  | BOLD e=list(MOT) BOLD { Texte_gras e }
+  | ITALIC e=list(MOT) ITALIC { Texte_italique e }
+  | RICH e=list(MOT) RICH {Texte_rich e }
   | e=MOT { Mot e }

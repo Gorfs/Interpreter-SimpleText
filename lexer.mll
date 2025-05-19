@@ -10,6 +10,7 @@ rule main = parse
   | layout		{ main lexbuf }
   | "##" { SUBTITLE }
   | '#' { TITLE }
+  | "***" { RICH }
   | "**" { BOLD }
   | "*" { ITALIC }
   | "\\item" { ITEM }
