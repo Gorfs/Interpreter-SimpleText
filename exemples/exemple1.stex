@@ -1,3 +1,4 @@
+\begindocument
 # Exemple de fichier SimpleText
 
 N ’ oubliez pas :
@@ -10,3 +11,5 @@ Pour mettre en forme le texte , on peut utiliser :
 \item du * texte en italique * ,
 \item du ** texte en gras ** ,
 \item et des [ liens hypertexte ]( https://fr.wikipedia.org/wiki/Hyperlien ) .
+
+\enddocument

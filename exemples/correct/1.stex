@@ -1,4 +1,6 @@
 \define{\monnom}{**Archie Beales**}
+\boolean{\bool}{true}
+\boolean{\bool2}{false}
 \begindocument
 # Titre du document
 
@@ -14,5 +16,15 @@ Un autre paragraphe, séparé par une ligne vide.
 ## Section 2 : Plus de détails
 
 Un paragraphe avec du texte en *italique* et en **gras**.
+
+\if \bool {
+  Ce texte est la normalement.
+}
+
+\if \bool2 {
+  Ce texte ne devrai pas etre la.
+}
+
+
 \enddocument
 Du texte en plus qui sert a rien

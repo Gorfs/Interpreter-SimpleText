@@ -1,3 +1,4 @@
+\begindocument
 # Exemple de fichier SimpleText un peux plus simple
 
 N ’ oubliez pas :
@@ -5,3 +6,7 @@ dans un fichier SimpleText ,
 les retours à la ligne
 sont ignor é s !
 Pour faire un nouveau paragraphe , il faut faire un * saut * de ligne .
+
+\enddocument
+
+du texte en plus qui ne devrait pas etre la
