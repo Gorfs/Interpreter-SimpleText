@@ -16,13 +16,13 @@ let get_definition cle =
   try
     (* let _ = Printf.printf "get_definition cle:%s\n" cle in *)
     StringMap.find cle !def_map
-  with Not_found ->  raise(Failure ("Erreur: la cle " ^ cle ^ " n'existe pas"))
+  with Not_found ->  Texte []
 
 let get_boolean cle = 
   try
     (* let _ = Printf.printf "get_definition cle:%s\n" cle in *)
     StringMap.find cle !boolean_map
-  with Not_found -> raise (Failure ("Erreur: la cle " ^ cle ^ " n'existe pas"))
+  with Not_found -> false
 
 (*ajouter une definition*)
 let add_definition cle valeur =
