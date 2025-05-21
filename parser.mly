@@ -15,6 +15,8 @@ boolean:
 
 document:
   | list(definition) BEGINDOC option(NEWLINE) e=corps ENDDOC option(NEWLINE) list(MOT) EOF { Document (e) }
+  // gestion fichier vide / sans contenu
+  | EOF { Document (Corps []) }
 
 definition:
   | DEFINE word=MOT LRBRACE option(TITLE)  (*title possible pour le hex*) replacement=texte RBRACE { add_definition word (replacement); () }

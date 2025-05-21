@@ -3,7 +3,7 @@
 (menhir
   (modules parser)
   (infer true)
-  (flags --explain --dump --trace))
+  (flags --explain --dump ))
 
 (executable
  (name main))
