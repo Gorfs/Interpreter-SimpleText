@@ -53,4 +53,8 @@ texte_rich:
   | BOLD e=list(MOT) BOLD { Texte_gras e }
   | ITALIC e=list(MOT) ITALIC { Texte_italique e }
   | RICH e=list(MOT) RICH {Texte_rich e }
+  | RICH e=list(MOT) ITALIC e1=list(MOT) BOLD  { Texte_bizarre_bold_last (e , e1) }
+  | RICH e=list(MOT) BOLD e1=list(MOT) ITALIC { Texte_bizarre_italic_last (e , e1) }
+  | BOLD e=list(MOT) ITALIC e1=list(MOT) RICH { Texte_bizarre_bold_first (e, e1) }
+  | ITALIC e=list(MOT) BOLD e1=list(MOT) RICH { (Texte_bizarre_italic_first (e, e1)) }
   | e=MOT {Mot e}

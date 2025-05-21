@@ -30,6 +30,14 @@ and texte_rich_to_string = function
   | Texte_gras ms -> "<b>" ^ (mot_list_to_string ms) ^ "</b>"
   | Texte_italique ms -> "<i>" ^ (mot_list_to_string ms) ^ "</i>"
   | Texte_rich ms -> "<b><i>" ^ (mot_list_to_string ms) ^ "</i></b>"
+  | Texte_bizarre_bold_last (ms1, ms2) -> 
+      "<b><i>" ^ (mot_list_to_string ms1) ^ "</i>" ^ (mot_list_to_string ms2) ^ "</b>"
+  | Texte_bizarre_italic_last (ms1, ms2) ->
+      "<b><i>" ^ (mot_list_to_string ms1) ^ "</b>" ^ (mot_list_to_string ms2) ^ "</i>"
+  | Texte_bizarre_italic_first (ms1, ms2) ->
+      "<i>" ^ (mot_list_to_string ms1) ^ "<b>" ^ (mot_list_to_string ms2) ^ "</b></i>"
+  | Texte_bizarre_bold_first (ms1, ms2) ->
+      "<b>" ^ (mot_list_to_string ms1) ^ "<i>" ^ (mot_list_to_string ms2) ^ "</i></b>"
   | Mot m -> mot_list_to_string [m]
 
 

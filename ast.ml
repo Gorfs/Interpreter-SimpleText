@@ -4,7 +4,11 @@ type  texte_rich =
 | Texte_gras of string list
 | Texte_italique of string list
 | Texte_rich of string list
-| Mot of string
+| Texte_bizarre_bold_last of (string list) * (string list)
+| Texte_bizarre_italic_last of (string list) * (string list)
+| Texte_bizarre_italic_first of (string list) * (string list)
+| Texte_bizarre_bold_first of (string list) * (string list)
+| Mot of string 
 
 
 type texte_couleur =
